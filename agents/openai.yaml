@@ -1,0 +1,5 @@
+interface:
+  display_name: Works DNA Extractor
+  short_description: Extracts fiction DNA for style-consistent continuation.
+  icon: 🧬
+  brand_color: "#6D5DFB"
