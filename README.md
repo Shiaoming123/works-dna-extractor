@@ -6,7 +6,7 @@
 
 ## 这是什么？
 
-Works DNA Extractor 是一个面向 AI 写作助手的技能（skill），可被 Hermes Agent、Claude Code、Cursor 等支持自定义技能的 AI Agent 加载使用。
+Works DNA Extractor 是一个面向 AI 写作助手的技能（skill），**同时兼容 Hermes Agent、Claude Code、OpenAI Codex 三大主流 AI Agent 平台**。
 
 核心思路：**提取方法，而非模仿文字**。
 
@@ -29,29 +29,49 @@ Works DNA Extractor 是一个面向 AI 写作助手的技能（skill），可被
 - **风格迁移**：将原作 DNA 应用到不同题材/世界观
 - **质量评估**：对比续写文本与 DNA 的吻合度，给出修复建议
 
+## 兼容平台
+
+| 平台 | 入口文件 | 加载方式 |
+|------|----------|----------|
+| **Hermes Agent** | `SKILL.md` | `/skill works-dna-extractor` 或自动匹配 |
+| **Claude Code** | `.claude/skills/works-dna-extractor.md` + `CLAUDE.md` | 自然语言自动触发 |
+| **OpenAI Codex** | `AGENTS.md` | 启动时自动加载 |
+
 ## 安装
 
 ### Hermes Agent
 
 ```bash
-# 直接安装
 hermes skill install works-dna-extractor
-
-# 或手动复制到技能目录
+# 或手动：
 cp -r works-dna-extractor ~/.hermes/skills/
 ```
 
-### Claude Code / Cursor
+### Claude Code
 
-将 `SKILL.md` 的内容放入项目的 `CLAUDE.md` 或 `.cursorrules` 中即可。
+```bash
+# 将 .claude/skills/ 目录复制到你的项目中
+cp -r .claude/ /path/to/your/project/.claude/
+
+# 或将 SKILL.md 内容追加到项目的 CLAUDE.md 中
+cat SKILL.md >> /path/to/your/project/CLAUDE.md
+```
+
+### OpenAI Codex
+
+```bash
+# 将 AGENTS.md 复制到你的项目根目录
+cp AGENTS.md /path/to/your/project/
+
+# Codex 启动时会自动读取 AGENTS.md 作为上下文
+```
 
 ## 使用
 
 ### 1. 提取作品 DNA
 
 ```
-# 在 Hermes Agent 中
-/skill works-dna-extractor
+# 任意平台下
 帮我分析这部小说的 DNA：[粘贴原文或指定文件路径]
 ```
 
@@ -71,17 +91,22 @@ cp -r works-dna-extractor ~/.hermes/skills/
 
 ```
 works-dna-extractor/
-├── SKILL.md                          # 主技能文件（核心逻辑）
+├── SKILL.md                              # Hermes Agent 技能文件（核心逻辑）
+├── CLAUDE.md                             # Claude Code 项目上下文
+├── AGENTS.md                             # Codex / 通用 Agent 指令
+├── .claude/
+│   └── skills/
+│       └── works-dna-extractor.md        # Claude Code 自动触发技能
 ├── agents/
-│   └── openai.yaml                   # OpenAI Agent 配置
+│   └── openai.yaml                       # OpenAI Agent 配置
 ├── references/
-│   ├── dna_schema.md                 # DNA JSON Schema（结构化输出格式）
-│   ├── continuation_protocol.md      # 续写协议（5 步流程）
-│   ├── evaluation_rubric.md          # 评估量表（8 维度打分）
-│   ├── corpus-batch-analysis.md      # 大规模语料批量分析（多 Agent 并行）
-│   └── wsl-powershell-file-access.md # WSL 环境特殊路径访问技巧
-├── README.md                         # 你正在读的文件
-└── LICENSE                           # MIT 许可证
+│   ├── dna_schema.md                     # DNA JSON Schema
+│   ├── continuation_protocol.md          # 续写协议（5 步）
+│   ├── evaluation_rubric.md              # 评估量表（8 维度）
+│   ├── corpus-batch-analysis.md          # 大规模语料批量分析
+│   └── wsl-powershell-file-access.md     # WSL 环境技巧
+├── README.md
+└── LICENSE (MIT)
 ```
 
 ## 核心能力
